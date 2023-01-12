@@ -30,7 +30,7 @@ def sudoku_solver(puzzle):
     success = False
     sections = [[] for x in range(9)]
     possible = []
-    for y, line in enumerate(puzzle):  # gets the numbers in the 3x3 area
+    for y, line in enumerate(puzzle):  # gets the numbers in the 3x3 area add a muttable coordinates (if it is 0)
         for x, num in enumerate(line):
             if num != 0:
                 sections[x//3 + (y//3)*3].append(num)
@@ -45,7 +45,7 @@ def sudoku_solver(puzzle):
             success = valid(possible[-1])
         if success:
             y, x, poss = possible[-1]
-            if puzzle[y][x] != poss and puzzle[y][x] != 0:
+            if puzzle[y][x] != poss and puzzle[y][x] != 0: #removing from sections
                 sections[x//3 + (y//3)*3].pop()
             puzzle[y][x] = poss
             sections[x//3 + (y//3)*3].append(poss)
