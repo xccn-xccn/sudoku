@@ -18,7 +18,7 @@ def valid(details, puzzle, section):
 
 def begin(puzzle):
     mutable = []
-    sections = [[] for _ in range(9)]
+    sections = []
     if len(puzzle) != 9:
         return False
     for y, line in enumerate(puzzle):
@@ -38,8 +38,7 @@ def sudoku_solver(puzzle):
     print(puzzle)
     # TODO make it error on multiple solutions and refactor code is too slow on 17 hint puzzles ?
     # make able checker better using valid
-    # change sections make each item in possible have its own puzzle (board)
-    #also got to ensure no repeats (set of tuple)
+    # change sections
 
     mutable, fixed_sections = begin(puzzle)
     count = 0
@@ -47,7 +46,6 @@ def sudoku_solver(puzzle):
     mutable_sections = [[] for x in range(9)]
     possible = [0] #stores the index of mutable
     index = 0
-    multiple_solutions = False
     # gets the numbers in the 3x3 area add a muttable coordinates (if it is 0)
     # for y, line in enumerate(puzzle):
     #     for x, num in enumerate(line):
@@ -67,17 +65,15 @@ def sudoku_solver(puzzle):
             puzzle[y][x] += 1
             success = valid(puzzle[y][x], puzzle, fixed_sections[x//3 + (y//3)*3] + mutable_sections[x//3 + (y//3)*3])
         if success:
+            y, x, poss = possible[-1]
             if puzzle[y][x] != poss and puzzle[y][x] != 0:  # removing from sections
                 fixed_sections[x//3 + (y//3)*3].pop()
-            mutable_sections[x//3 + (y//3)*3].append(poss)
-            index += 1
-            if index == len(mutable):
-                if multiple_solutions:
-                    raise Exception
-                else:
-                    multiple_solutions = True
-            else:
-                possible.append(index)
+            puzzle[y][x] = poss
+            fixed_sections[x//3 + (y//3)*3].append(poss)
+            search_stuff = search(puzzle)
+            if search_stuff == None:
+                return puzzle
+            possible.append(search_stuff)
         else:
             y, x, poss = possible.pop()
             if puzzle[y][x] == fixed_sections[x//3 + (y//3)*3][-1]:
