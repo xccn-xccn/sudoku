@@ -67,7 +67,7 @@ def solve_single(puzzle, seen = None):
                 return puzzle
         else:
             index -= 1
-            if index < 0:
+            if index < 0: #is negative indexing
                 break
             if not new:
                 sections[sections_index].pop()
