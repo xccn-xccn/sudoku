@@ -56,7 +56,7 @@ def solve_single(puzzle, seen = None):
         y, x = mutable[index]
         sections_index = x//3 + (y//3)*3
         success = False
-        new = puzzle[y][x] == 0
+        new = puzzle[y][x] == 0 
         while success == False and puzzle[y][x] < 9:
             puzzle[y][x] += 1
             success = valid(y, x, puzzle, sections[sections_index]) 
