@@ -41,35 +41,27 @@ def sudoku_solver(puzzle):
     # change sections make each item in possible have its own puzzle (board)
     #also got to ensure no repeats (set of tuple)
 
-    mutable, fixed_sections = begin(puzzle)
+    mutable, sections = begin(puzzle)
     count = 0
     success = False
     mutable_sections = [[] for x in range(9)]
-    possible = [0] #stores the index of mutable
+    possible = [(0, puzzle)]  #stores the index of mutable and the current puzzle
     index = 0
     multiple_solutions = False
-    # gets the numbers in the 3x3 area add a muttable coordinates (if it is 0)
-    # for y, line in enumerate(puzzle):
-    #     for x, num in enumerate(line):
-    #         if num != 0:
-    #             sections[x//3 + (y//3)*3].append(num)
-    #         else:
-    #             mutable.append(y, x)
-    # possible.append(search(puzzle))
+    seen = set()
     while possible:
         count += 1
         print(count)
         # print(possible)
         index = possible.pop()
-        y, x = mutable[index]
-
+        y, x, current_puzzle = mutable[index]
+        sections_index = x//3 + (y//3)*3
         while success == False and puzzle[y][x] < 9:
             puzzle[y][x] += 1
-            success = valid(puzzle[y][x], puzzle, fixed_sections[x//3 + (y//3)*3] + mutable_sections[x//3 + (y//3)*3])
+            # success = valid(puzzle[y][x], puzzle, fixed_sections[x//3 + (y//3)*3] + mutable_sections[x//3 + (y//3)*3])
+            success = valid(puzzle[y][x], puzzle, sections[sections_index]) 
         if success:
-            if puzzle[y][x] != poss and puzzle[y][x] != 0:  # removing from sections
-                fixed_sections[x//3 + (y//3)*3].pop()
-            mutable_sections[x//3 + (y//3)*3].append(poss)
+            sections[sections_index].append(puzzle[y][x])
             index += 1
             if index == len(mutable):
                 if multiple_solutions:
@@ -79,9 +71,10 @@ def sudoku_solver(puzzle):
             else:
                 possible.append(index)
         else:
+            sections[sections_index].pop()
             y, x, poss = possible.pop()
-            if puzzle[y][x] == fixed_sections[x//3 + (y//3)*3][-1]:
-                fixed_sections[x//3 + (y//3)*3].pop()
+            if puzzle[y][x] == sections[sections_index][-1]:
+                sections[sections_index].pop()
             puzzle[y][x] = 0
         success = False
     raise Exception
