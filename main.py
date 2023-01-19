@@ -24,6 +24,7 @@ def valid(y, x, puzzle, section): #takes around 0.02 ms
 def begin(puzzle):
     mutable = []
     sections = [[] for _ in range(9)]
+    rows, columns = {k: [] for k in range(9)} #work on this 
     if len(puzzle) != 9:
         return False
     for y, line in enumerate(puzzle):
@@ -60,10 +61,12 @@ def solve_single(puzzle, seen=None):
             new = True
         else:
             sections[sections_index].pop()
+
         while success == False and puzzle[y][x] < 9:
             puzzle[y][x] += 1
             success, add_to_time = valid(y, x, puzzle, sections[sections_index])
             time += add_to_time
+
         if success:
             sections[sections_index].append(puzzle[y][x])
             index += 1
