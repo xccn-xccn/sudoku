@@ -24,12 +24,13 @@ def begin(puzzle):
         if len(puzzle) != 9:
             return False
         for x, num in enumerate(line):
-            #print(y, x, num, valid((y, x, num), puzzle, [[]] * 9), "in begin")
             if num > 9 or num < 0 or (num != 0 and not valid(y, x, puzzle, [[]] * 9)):
                 raise Exception
             else:
-                mutable.append((y, x))
-                sections[x//3 + (y//3)*3].append(num)
+                if num == 0:
+                    mutable.append((y, x))
+                else:
+                    sections[x//3 + (y//3)*3].append(num)
     return mutable, sections
 
 
@@ -43,6 +44,7 @@ def solve_single(puzzle, seen = None):
     if seen == None:
         seen = set()
     mutable, sections = begin(puzzle)
+    print(mutable)
     count = 0
     success = False
     mutable_sections = [[] for x in range(9)]
@@ -51,15 +53,16 @@ def solve_single(puzzle, seen = None):
     multiple_solutions = False
     seen = set()
     while True: #needs to change
-        count += 1
-        print(count, index)
         y, x = mutable[index]
+        print(index, y, x)
         sections_index = x//3 + (y//3)*3
         success = False
         new = puzzle[y][x] == 0 
+        print(puzzle[y][x], "should be 0")
         while success == False and puzzle[y][x] < 9:
             puzzle[y][x] += 1
             success = valid(y, x, puzzle, sections[sections_index]) 
+        print(success, puzzle[y][x])
         if success:
             sections[sections_index].append(puzzle[y][x])
             index += 1
@@ -80,7 +83,8 @@ def sudoku_solver(puzzle):
 
 
 if __name__ == "__main__":
-    print(solve_single([[0, 9, 6, 5, 0, 4, 0, 7, 1],
+    print(solve_single(
+                [[0, 9, 6, 5, 0, 4, 0, 7, 1],
                  [0, 2, 0, 1, 0, 0, 0, 0, 0],
                  [0, 1, 4, 0, 9, 0, 6, 2, 3],
                  [0, 0, 3, 0, 6, 0, 0, 8, 0],
