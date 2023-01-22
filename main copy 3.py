@@ -68,7 +68,7 @@ def sudoku_solver(puzzle):
 
 
 if __name__ == "__main__":
-    # TODO make it raise error when there are multiple solutions (or any invalids)
+    # TODO make it raise error when there are multiple solutions (or any invalids) 
     start = perf_counter()
     print(solve_single([[0, 0, 0, 0, 0, 2, 7, 5, 0],
                         [0, 1, 8, 0, 9, 0, 0, 0, 0],
