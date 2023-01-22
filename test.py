@@ -1,4 +1,4 @@
-a = {1:[5]}
-print(a)
-# b = set([[5], [3]])
-# print(b)
+a = {}
+a[1] = "h"
+a[0] = "g"
+print(1 in a)
